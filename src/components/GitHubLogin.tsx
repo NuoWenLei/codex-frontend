@@ -30,7 +30,7 @@ export default function GitHubLogin() {
   return (
     <button
       onClick={signInWithGitHub}
-      className="px-4 py-2 bg-gray-900 text-white rounded-lg"
+      className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition duration-200"
     >
       Sign in with GitHub
     </button>
