@@ -18,7 +18,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: "/(.*)",
+        source: "http://54.90.74.38/api/(.*)",
         headers: [
           {
             key: "Content-Security-Policy",
