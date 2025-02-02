@@ -66,6 +66,10 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
     fetchRepositories();
   }, [owner, token]);
 
+  const handleIntegrate = (repoName: string, index: number) => {
+    setConfirmRepo(repoName);
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md border border-gray-200">
       <h2 className="text-2xl font-semibold text-gray-900 mb-4">Repositories</h2>
@@ -76,7 +80,7 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
         <p className="text-gray-500">No repositories found.</p>
       ) : (
         <div className="border border-gray-300 rounded-lg bg-white divide-y divide-gray-200">
-          {repositories.map((repo) => (
+          {repositories.map((repo, index) => (
             <div key={repo.id} className="flex justify-between items-center px-4 py-3 hover:bg-gray-100 rounded-lg">
               <div className="flex items-center">
                 <span className="mr-2 text-gray-600">📁</span>
@@ -86,7 +90,7 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
               </div>
               {/* ✅ GitHub-style Integration Button */}
               <button
-                onClick={() => setConfirmRepo(repo.name)}
+                onClick={() => handleIntegrate(repo.name, index)}
                 className="px-3 py-1 bg-gray-200 text-gray-700 font-medium rounded-md hover:bg-gray-300 transition"
               >
                 Integrate with Codex
@@ -136,7 +140,7 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
           ) : (
             <>
               <span className="text-red-600 font-semibold">❌ Failed:</span>
-              <span className="text-gray-900">"{integrationStatus.repo}" could not be integrated.</span>
+              <span className="text-gray-900">"{integrationStatus.repo}" already integrated.</span>
             </>
           )}
           <button
