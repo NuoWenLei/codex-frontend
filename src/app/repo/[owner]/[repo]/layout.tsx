@@ -51,7 +51,7 @@ export default function RepoLayout({ children }: { children: ReactNode }) {
       {/* Repo Header with Branch Selector */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">
-          <Link href={`/repo/${params.owner}/${params.repo}`} className="text-blue-600 hover:underline">
+          <Link href={`/repo/${params.owner}/${params.repo}`} className="text-blue-300 hover:underline">
             {params.repo}
           </Link>
         </h1>

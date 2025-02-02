@@ -13,7 +13,7 @@ export default function Breadcrumb({ owner, repo, branch, path = [] }: Breadcrum
 
   return (
     <nav className="text-sm text-gray-500 mb-4">
-      <Link href={`/repo/${owner}/${repo}`} className="text-blue-600 hover:underline">
+      <Link href={`/repo/${owner}/${repo}`} className="text-blue-300 hover:underline">
         {repo}
       </Link>
 
@@ -23,7 +23,7 @@ export default function Breadcrumb({ owner, repo, branch, path = [] }: Breadcrum
           return (
             <span key={currentPath}>
               {" / "}
-              <Link href={`${basePath}/${currentPath}`} className="text-blue-600 hover:underline">
+              <Link href={`${basePath}/${currentPath}`} className="text-blue-300 hover:underline">
                 {segment}
               </Link>
             </span>
