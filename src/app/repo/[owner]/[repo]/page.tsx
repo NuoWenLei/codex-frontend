@@ -1,13 +1,40 @@
-import Link from "next/link";
+"use client";
 
-export default function RepoPage({ params }: { params: { owner: string; repo: string } }) {
+import { useParams, useSearchParams } from "next/navigation";
+import FolderView from "@/components/FolderView";
+import FileView from "@/components/FileView";
+import { useAtom } from "jotai"
+import { selectedBranchAtom } from "@/state/atoms";
+
+export default function RepoPage() {
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN!;
+  
+  // Get selected branch from URL (set by layout)
+  const [selectedBranch] = useAtom(selectedBranchAtom);
+
   return (
-    <div className="max-w-4xl mx-auto p-4">
-      <h1 className="text-2xl font-bold">{params.repo}</h1>
-      <div className="mt-4">
-        <Link href={`/repo/${params.owner}/${params.repo}/tree/main`}>
-          <button className="px-4 py-2 bg-blue-500 text-white rounded">View Files</button>
-        </Link>
+    <div>
+      {/* Folder Content */}
+      <FolderView
+        owner={params.owner as string}
+        repo={params.repo as string}
+        branch={selectedBranch}
+        path={undefined}
+        token={token}
+      />
+
+      {/* README File View */}
+      <div className="pt-10">
+        <div>README</div>
+        <FileView
+          owner={params.owner as string}
+          repo={params.repo as string}
+          branch={selectedBranch}
+          path="README.md"
+          token={token}
+        />
       </div>
     </div>
   );

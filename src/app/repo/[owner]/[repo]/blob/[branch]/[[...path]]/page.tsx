@@ -1,9 +1,41 @@
+"use client";
+
+import { useParams } from "next/navigation";
+import Breadcrumb from "@/components/Breadcrumb";
 import FileView from "@/components/FileView";
+import { useAtom } from "jotai"
+import { selectedBranchAtom } from "@/state/atoms";
 
-export default async function RepoBlobPage({ params }: { params: { owner: string; repo: string; branch: string; path?: string[] } }) {
-  const {owner, repo, branch, path} = await params;
-  const blobPath = path?.join("/") || "";
-  const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN!; // Store token in env variable
+export default function RepoBlobPage() {
+  const params = useParams();
+  const [selectedBranch] = useAtom(selectedBranchAtom);
 
-  return <FileView owner={owner} repo={repo} branch={branch} path={blobPath} token={token} />;
+  const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN!;
+
+  // Normalize `params.path` so it's always an array
+  const pathArray =
+    typeof params.path === "string" ? [params.path] : params.path || [];
+  const path = pathArray.join("/");
+
+  return (
+    <div className="max-w-4xl mx-auto p-4">
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb
+        owner={params.owner as string}
+        repo={params.repo as string}
+        branch={selectedBranch}
+        path={pathArray}
+      />
+
+      {/* File Content */}
+      <FileView
+        owner={params.owner as string}
+        repo={params.repo as string}
+        branch={selectedBranch}
+        path={path}
+        token={token}
+      />
+    </div>
+  );
+
 }
