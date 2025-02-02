@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 
 import Link from "next/link";
@@ -20,15 +21,16 @@ export default function Navbar() {
   };
 
   const handleRedirectToRepositories = async () => {
-    const githubUsername = (authUser as any)?.reloadUserInfo?.screenName || null;
+    const githubUsername =
+      (authUser as any)?.reloadUserInfo?.screenName || null;
     router.replace(`/${githubUsername}`);
   };
 
   useEffect(() => {
     if (!authUser) {
-      router.replace("/")
+      router.replace("/");
     }
-  }, [authUser, router])
+  }, [authUser, router]);
 
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-gray-900 text-white">

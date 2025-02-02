@@ -100,7 +100,7 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
         <p className="text-gray-500">No repositories found.</p>
       ) : (
         <div className="border border-gray-300 rounded-lg bg-white divide-y divide-gray-200">
-          {repositories.map((repo) => (
+          {repositories.map((repo, index) => (
             <div
               key={repo.id}
               className="flex justify-between items-center px-4 py-3 hover:bg-gray-100 rounded-lg"
