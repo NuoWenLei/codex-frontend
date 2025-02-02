@@ -24,6 +24,8 @@ export default function FileView({ owner, repo, branch, path, token }: FileViewP
 
   const githubUsername = (authUser as any)?.reloadUserInfo?.screenName || null;
 
+  console.log(`args: ${owner}, ${repo}, ${branch}, ${path}, ${token}`);
+
   useEffect(() => {
     const fetchFile = async () => {
       setLoading(true);
@@ -33,11 +35,13 @@ export default function FileView({ owner, repo, branch, path, token }: FileViewP
 
       if (res.ok) {
         const data = await res.json();
+        // console.log("data read");
         if (data.encoding === "base64") {
           const decodedContent = atob(data.content);
           setFileContent(decodedContent);
           setFileType(data.name.split(".").pop() || "txt");
         }
+        // console.log("data decoded");
       } else {
         setFileContent(null);
       }
