@@ -1,4 +1,4 @@
- /* eslint-disable */
+/* eslint-disable */
 "use client";
 
 import { authUserAtom } from "@/state/atoms";
@@ -21,7 +21,10 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
   const [loading, setLoading] = useState(true);
   const [confirmRepo, setConfirmRepo] = useState<string | null>(null);
   const [integratingRepo, setIntegratingRepo] = useState<string | null>(null);
-  const [integrationStatus, setIntegrationStatus] = useState<{ repo: string; success: boolean } | null>(null);
+  const [integrationStatus, setIntegrationStatus] = useState<{
+    repo: string;
+    success: boolean;
+  } | null>(null);
 
   const authUser = useAtomValue(authUserAtom);
   const githubUsername = (authUser as any)?.reloadUserInfo?.screenName || null;
@@ -29,8 +32,15 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
   // ✅ Handle integration request
   const integrateWithCodex = async (repo: string) => {
     setIntegratingRepo(repo);
-    const apiUrl = `http://54.90.74.38/api/github/${owner}/${repo}/${githubUsername}/initialize`;
-    const res = await fetch(apiUrl, { method: "POST" });
+    const apiUrl = `/github/${owner}/${repo}/${githubUsername}/initialize`;
+    const res = await fetch(`/api/intercepted`, {
+      method: "POST",
+      body: JSON.stringify({
+        backend_path: apiUrl,
+        method: "POST",
+        body: {},
+      }),
+    });
 
     if (res.ok) {
       console.log(`Successfully integrated ${repo} with Codex`);
@@ -51,12 +61,20 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
   React.useEffect(() => {
     const fetchRepositories = async () => {
       setLoading(true);
-      const apiUrl = `http://54.90.74.38/api/users/${owner}/repos`;
-      const res = await fetch(apiUrl);
+      const apiUrl = `/users/${owner}/repos`;
+      const res = await fetch(`/api/intercepted`, {
+        method: "POST",
+        body: JSON.stringify({
+          backend_path: apiUrl,
+          method: "GET",
+        }),
+      });
 
       if (res.ok) {
         const data = await res.json();
-        setRepositories(data.map((repo: any) => ({ name: repo.name, id: repo.id })));
+        setRepositories(
+          data.map((repo: any) => ({ name: repo.name, id: repo.id }))
+        );
       } else {
         setRepositories([]);
       }
@@ -68,7 +86,9 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md border border-gray-200">
-      <h2 className="text-2xl font-semibold text-gray-900 mb-4">Repositories</h2>
+      <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+        Repositories
+      </h2>
 
       {loading ? (
         <p className="text-gray-500">Loading repositories...</p>
@@ -77,10 +97,16 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
       ) : (
         <div className="border border-gray-300 rounded-lg bg-white divide-y divide-gray-200">
           {repositories.map((repo) => (
-            <div key={repo.id} className="flex justify-between items-center px-4 py-3 hover:bg-gray-100 rounded-lg">
+            <div
+              key={repo.id}
+              className="flex justify-between items-center px-4 py-3 hover:bg-gray-100 rounded-lg"
+            >
               <div className="flex items-center">
                 <span className="mr-2 text-gray-600">📁</span>
-                <Link href={`/repo/${owner}/${repo.name}`} className="text-blue-600 font-medium hover:underline">
+                <Link
+                  href={`/repo/${owner}/${repo.name}`}
+                  className="text-blue-600 font-medium hover:underline"
+                >
                   {repo.name}
                 </Link>
               </div>
@@ -104,7 +130,8 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
               Confirm Integration
             </h2>
             <p className="text-gray-600 mb-4">
-              Are you sure you want to integrate <strong>{confirmRepo}</strong> with Codex?
+              Are you sure you want to integrate <strong>{confirmRepo}</strong>{" "}
+              with Codex?
             </p>
             <div className="flex justify-center space-x-4">
               <button
@@ -112,7 +139,9 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
                 className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
                 disabled={integratingRepo === confirmRepo}
               >
-                {integratingRepo === confirmRepo ? "Integrating..." : "Yes, Integrate"}
+                {integratingRepo === confirmRepo
+                  ? "Integrating..."
+                  : "Yes, Integrate"}
               </button>
               <button
                 onClick={() => setConfirmRepo(null)}
@@ -131,12 +160,16 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
           {integrationStatus.success ? (
             <>
               <span className="text-green-600 font-semibold">✅ Success:</span>
-              <span className="text-gray-900">"{integrationStatus.repo}" integrated with Codex.</span>
+              <span className="text-gray-900">
+                "{integrationStatus.repo}" integrated with Codex.
+              </span>
             </>
           ) : (
             <>
               <span className="text-red-600 font-semibold">❌ Failed:</span>
-              <span className="text-gray-900">"{integrationStatus.repo}" could not be integrated.</span>
+              <span className="text-gray-900">
+                "{integrationStatus.repo}" could not be integrated.
+              </span>
             </>
           )}
           <button

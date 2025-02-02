@@ -10,7 +10,6 @@ export default function PatModal({ username }: { username: string }) {
 
   const handleSave = async () => {
     const postPat = async () => {
-      // const apiUrl = `http://54.90.74.38/api/create/user`;
       const res = await fetch(`/api/intercepted`, {
         method: "POST",
         body: JSON.stringify({
@@ -23,17 +22,6 @@ export default function PatModal({ username }: { username: string }) {
           },
         }),
       });
-      // const res = await fetch(apiUrl, {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     user_name: username,
-      //     language: selectedLanguage, // ✅ Send selected language
-      //     pat: inputValue,
-      //   }),
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // });
 
       if (res.ok) {
         const data = await res.json();
