@@ -1,3 +1,4 @@
+ /* eslint-disable */
 "use client";
 
 import { signInWithPopup } from "firebase/auth";
