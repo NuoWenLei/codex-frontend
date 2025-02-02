@@ -1,14 +1,26 @@
 "use client";
 
 import { signInWithPopup } from "firebase/auth";
+import { useAtom } from "jotai";
+import { authUserAtom, githubUsernameAtom, isNewUserAtom } from "@/state/atoms";
 import { auth, githubProvider } from "@/lib/firebase";
 
 export default function GitHubLogin() {
+  const [, setAuthUser] = useAtom(authUserAtom);
+
   const signInWithGitHub = async () => {
     try {
       const result = await signInWithPopup(auth, githubProvider);
       const user = result.user;
-      console.log("Logged in as:", user);
+      const githubUsername = (user as any)?.reloadUserInfo?.screenName || null;
+
+      console.log("User signed in:", user);
+      console.log("GitHub Username:", githubUsername);
+
+      // ✅ Check if user exists in MongoDB
+
+      setAuthUser(user);
+
     } catch (error) {
       console.error("GitHub Login Error:", error);
     }
