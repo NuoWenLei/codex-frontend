@@ -1,4 +1,4 @@
- /* eslint-disable */
+/* eslint-disable */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -36,9 +36,15 @@ export default function FolderView({
   useEffect(() => {
     const fetchContents = async () => {
       setLoading(true);
-      const apiUrl = `http://54.90.74.38/api/github/${owner}/${repo}/${githubUsername}/${branch}/content/${path}`;
-      console.log("apiurl: ", apiUrl)
-      const res = await fetch(apiUrl);
+      const apiUrl = `/github/${owner}/${repo}/${githubUsername}/${branch}/content/${path}`;
+      console.log("apiurl: ", apiUrl);
+      const res = await fetch(`/api/intercepted`, {
+        method: "POST",
+        body: JSON.stringify({
+          backend_path: apiUrl,
+          method: "GET",
+        }),
+      });
 
       if (res.ok) {
         const data = await res.json();
