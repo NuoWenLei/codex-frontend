@@ -50,9 +50,9 @@ export default function RootLayout({
     <Provider>
       <AuthProvider>
         <html lang="en">
-         <head>
-          <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-         </head>
+         <Head>
+          <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+         </Head>
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
