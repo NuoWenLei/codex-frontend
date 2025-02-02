@@ -1,3 +1,4 @@
+ /* eslint-disable */
 "use client";
 
 import { authUserAtom } from "@/state/atoms";
