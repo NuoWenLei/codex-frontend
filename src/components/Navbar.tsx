@@ -19,6 +19,11 @@ export default function Navbar() {
     router.replace("/"); // Redirect to home page after signing out
   };
 
+  const handleRedirectToRepositories = async () => {
+    const githubUsername = (authUser as any)?.reloadUserInfo?.screenName || null;
+    router.replace(`/${githubUsername}`);
+  };
+
   useEffect(() => {
     if (!authUser) {
       router.replace("/")
@@ -31,6 +36,16 @@ export default function Navbar() {
       <Link href="/" className="text-2xl font-bold tracking-wide">
         Codex
       </Link>
+
+      {/* Navigate back to the Repositories page */}
+      {authUser && (
+        <button
+          onClick={handleRedirectToRepositories}
+          className="px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-lg"
+        >
+          Repositories
+        </button>
+      )}
 
       {/* Auth Button */}
       {authUser ? (

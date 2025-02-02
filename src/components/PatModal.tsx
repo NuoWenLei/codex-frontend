@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 export default function PatModal({ username }: { username: string }) {
   const [inputValue, setInputValue] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("english"); // ✅ Default to English
+  const [selectedLanguage, setSelectedLanguage] = useState("chinese"); // ✅ Default to Chinese
   const router = useRouter();
 
   const handleSave = async () => {
@@ -54,6 +54,8 @@ export default function PatModal({ username }: { username: string }) {
           <option value="english">English</option>
           <option value="chinese">Chinese</option>
           <option value="german">German</option>
+          <option value="spanish">Spanish</option>
+          <option value="mongolian">Mongolian</option>
         </select>
 
         {/* ✅ PAT Input Field */}
