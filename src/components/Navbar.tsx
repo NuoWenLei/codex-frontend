@@ -10,11 +10,12 @@ import GitHubLogin from "@/components/GitHubLogin";
 import { useEffect } from "react";
 
 export default function Navbar() {
-  const [authUser] = useAtom(authUserAtom);
+  const [authUser, setAuthUser] = useAtom(authUserAtom);
   const router = useRouter();
 
   const handleSignOut = async () => {
     await signOut(auth);
+    setAuthUser(null);
     router.replace("/"); // Redirect to home page after signing out
   };
 
