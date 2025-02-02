@@ -54,7 +54,7 @@ export default function PatModal({ username }: { username: string }) {
           <option value="english">English</option>
           <option value="chinese">Chinese</option>
           <option value="german">German</option>
-          <option value="spanish">Spanish</option>
+          <option value="japanese">Japanese</option>
           <option value="mongolian">Mongolian</option>
         </select>
 
