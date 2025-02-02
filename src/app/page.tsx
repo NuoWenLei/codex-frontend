@@ -1,4 +1,4 @@
- /* eslint-disable */
+/* eslint-disable */
 "use client";
 
 import { useEffect, useState } from "react";
@@ -17,11 +17,16 @@ export default function Home() {
 
   const githubUsername = (authUser as any)?.reloadUserInfo?.screenName || null;
 
-
   const checkIfUserExists = async (username: string) => {
     console.log("Checking if user exists for:", username);
     try {
-      const response = await fetch(`http://54.90.74.38/api/exists/user/${username}`);
+      const response = await fetch(`/api/intercepted`, {
+        method: "POST",
+        body: JSON.stringify({
+          backend_path: `/exists/user/${username}`,
+          method: "GET",
+        }),
+      });
       const data = await response.json();
       console.log("API Response:", data);
       return data.result === "exists";
@@ -61,12 +66,17 @@ export default function Home() {
           ) : isNewUser ? (
             <>
               <p>Welcome! First-time login detected.</p>
-              <PatModal username={githubUsername} /> // ✅ Show modal if first-time login
+              <PatModal username={githubUsername} /> // ✅ Show modal if
+              first-time login
             </>
           ) : (
             <div className="flex flex-col items-center">
-              <p>Signed in as <strong>{githubUsername || authUser.email}</strong></p>
-              <p>Email: <strong>{authUser.email || "No email provided"}</strong></p>
+              <p>
+                Signed in as <strong>{githubUsername || authUser.email}</strong>
+              </p>
+              <p>
+                Email: <strong>{authUser.email || "No email provided"}</strong>
+              </p>
               <button
                 onClick={() => signOut(auth)}
                 className="px-4 py-2 mt-4 bg-red-500 text-white rounded-lg"
