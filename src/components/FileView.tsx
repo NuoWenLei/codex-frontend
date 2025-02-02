@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import 'github-markdown-css';
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
@@ -20,6 +19,8 @@ export default function FileView({ owner, repo, branch, path, token }: FileViewP
   const [fileType, setFileType] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  console.log(`args: ${owner}, ${repo}, ${branch}, ${path}, ${token}`);
+
   useEffect(() => {
     const fetchFile = async () => {
       setLoading(true);
@@ -30,11 +31,13 @@ export default function FileView({ owner, repo, branch, path, token }: FileViewP
 
       if (res.ok) {
         const data = await res.json();
+        // console.log("data read");
         if (data.encoding === "base64") {
           const decodedContent = atob(data.content);
           setFileContent(decodedContent);
           setFileType(data.name.split(".").pop() || "txt");
         }
+        // console.log("data decoded");
       } else {
         setFileContent(null);
       }
@@ -48,7 +51,7 @@ export default function FileView({ owner, repo, branch, path, token }: FileViewP
     <div className="max-w-4xl mx-auto p-4">
       {loading ? <p>Loading file...</p> : fileContent === null ? <p>Failed to load file.</p> : fileType === 'md' ? (
           <div className="markdown-body !bg-[transparent]">
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>{fileContent}</ReactMarkdown>
+            <ReactMarkdown>{fileContent}</ReactMarkdown>
           </div>
         ) :(
         <SyntaxHighlighter language={fileType ?? undefined} style={dracula}>
