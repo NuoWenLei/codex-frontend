@@ -10,7 +10,7 @@ export default function PatModal({ username }: { username: string }) {
 
   const handleSave = async () => {
     const postPat = async () => {
-      const apiUrl = `http://54.90.74.38/api/create/user`;
+      // const apiUrl = `http://54.90.74.38/api/create/user`;
       const res = await fetch(`/api/intercepted`, {
         method: "POST",
         body: JSON.stringify({
