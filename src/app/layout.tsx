@@ -2,6 +2,7 @@
 "use client";
 
 import type { Metadata } from "next";
+import Head from 'next/head';
 import { Geist, Geist_Mono } from "next/font/google";
 import { Provider, useAtom } from "jotai";
 
@@ -49,6 +50,9 @@ export default function RootLayout({
     <Provider>
       <AuthProvider>
         <html lang="en">
+         <head>
+          <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+         </head>
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
