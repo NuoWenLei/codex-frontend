@@ -3,29 +3,28 @@
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
-import { useAtom } from "jotai"
-import { selectedBranchAtom } from "@/state/atoms";
+import { useAtom, useAtomValue } from "jotai"
+import { authUserAtom, selectedBranchAtom } from "@/state/atoms";
 
 export default function RepoLayout({ children }: { children: ReactNode }) {
   const params = useParams(); // Get dynamic route params
   const searchParams = useSearchParams();
   const router = useRouter();
-  const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN!;
 
   const [branches, setBranches] = useState<string[]>([]);
   const [selectedBranch, setSelectedBranch] = useAtom(selectedBranchAtom);
+
+    const authUser = useAtomValue(authUserAtom);
+  
+    const githubUsername = (authUser as any)?.reloadUserInfo?.screenName || null;
 
   useEffect(() => {
     const fetchBranches = async () => {
       if (!params.owner || !params.repo) return;
 
-      const res = await fetch(
-        `https://api.github.com/repos/${params.owner}/${params.repo}/branches`,
-        {
-          headers: { Authorization: `token ${token}` },
-        }
-      );
-
+      const apiUrl = `http://54.90.74.38/api/repos/${params.owner}/${params.repo}/${githubUsername}/branches`;
+      console.log("apiurl: ", apiUrl)
+      const res = await fetch(apiUrl);
       if (res.ok) {
         const data = await res.json();
         const branchNames = data.map((branch: any) => branch.name);
@@ -37,7 +36,7 @@ export default function RepoLayout({ children }: { children: ReactNode }) {
     };
 
     fetchBranches();
-  }, [params, token, searchParams]);
+  }, [params, searchParams]);
 
   // Handle branch change
   const handleBranchChange = (newBranch: string) => {

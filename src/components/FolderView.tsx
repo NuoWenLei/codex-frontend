@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useAtomValue } from "jotai";
+import { authUserAtom } from "@/state/atoms";
 
 interface FileItem {
   name: string;
@@ -26,16 +28,16 @@ export default function FolderView({
 }: FolderViewProps) {
   const [contents, setContents] = useState<FileItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const authUser = useAtomValue(authUserAtom);
+
+  const githubUsername = (authUser as any)?.reloadUserInfo?.screenName || null;
 
   useEffect(() => {
     const fetchContents = async () => {
       setLoading(true);
-      const res = await fetch(
-        `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,
-        {
-          headers: { Authorization: `token ${token}` },
-        }
-      );
+      const apiUrl = `http://54.90.74.38/api/github/${owner}/${repo}/${githubUsername}/${branch}/content/${path}`;
+      console.log("apiurl: ", apiUrl)
+      const res = await fetch(apiUrl);
 
       if (res.ok) {
         const data = await res.json();
@@ -51,7 +53,7 @@ export default function FolderView({
 
   // Determine where ".." should link to
   const parentPath = path.split("/").slice(0, -1).join("/");
-  console.log("parentPath, ", parentPath)
+  console.log("parentPath, ", parentPath);
   const backtrackHref = parentPath
     ? `/repo/${owner}/${repo}/tree/${branch}/${parentPath}` // Normal backtracking
     : `/repo/${owner}/${repo}`; // Go to repo root when at branch root
