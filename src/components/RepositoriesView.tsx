@@ -172,7 +172,7 @@ function RepositoriesView({ owner, token }: RepositoriesViewProps) {
             <>
               <span className="text-red-600 font-semibold">❌ Failed:</span>
               <span className="text-gray-900">
-                "{integrationStatus.repo}" could not be integrated.
+                "{integrationStatus.repo}" already integrated.
               </span>
             </>
           )}
